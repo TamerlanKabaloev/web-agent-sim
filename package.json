@@ -13,6 +13,7 @@
     "@react-three/drei": "^9.88.0",
     "@react-three/fiber": "^8.15.0",
     "leva": "^0.9.35",
+    "pathfinding": "^0.4.18",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "three": "^0.158.0",
@@ -34,4 +35,7 @@
     "vite": "^5.0.0"
   }
 }
+
+
+
 

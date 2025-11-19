@@ -30,3 +30,7 @@ This is a web-based agent simulation similar to AnyLogic, built with React, Thre
 - **Mouse Right Click + Drag**: Pan camera.
 - **Mouse Wheel**: Zoom.
 
+
+
+
+

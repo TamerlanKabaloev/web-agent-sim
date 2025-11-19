@@ -35,6 +35,18 @@ export const Tunnel = () => {
         <planeGeometry args={[width, 0.2]} />
         <meshBasicMaterial color="red" />
       </mesh>
+      
+      {/* Approach Floor (20m back) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, -length / 2 - 10]} receiveShadow>
+        <planeGeometry args={[width * 1.2, 20]} />
+        <meshStandardMaterial color="#333" />
+      </mesh>
+      
+      {/* Approach Marker */}
+      <mesh position={[0, 0.01, -length / 2 - 20]} rotation={[-Math.PI / 2, 0, 0]}>
+         <planeGeometry args={[width, 0.5]} />
+         <meshBasicMaterial color="yellow" transparent opacity={0.5} />
+      </mesh>
     </group>
   )
 }
