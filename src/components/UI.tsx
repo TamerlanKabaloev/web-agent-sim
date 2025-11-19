@@ -1,4 +1,4 @@
-import { useSimulationStore, SimulationMode, BuildTool } from '../store'
+import { useSimulationStore, SimulationMode } from '../store'
 
 export const UI = () => {
   const {
@@ -6,15 +6,11 @@ export const UI = () => {
     tunnelWidth, setTunnelWidth,
     tunnelLength, setTunnelLength,
     passengersPer15Min, setPassengersPer15Min,
-    maxAgents, setMaxAgents,
     agentSpeedMin, agentSpeedMax, setAgentSpeedRange,
     gateCount, setGateCount,
     gateServiceTime, setGateServiceTime,
-    escalatorHeight, setEscalatorHeight,
-    escalatorDirection, setEscalatorDirection,
-    escalatorSpeed, setEscalatorSpeed,
     isRunning, toggleSimulation, resetSimulation,
-    agents, agentsSpawnedTotal
+    agents, agentsSpawnedTotal, maxAgents
   } = useSimulationStore()
 
   return (

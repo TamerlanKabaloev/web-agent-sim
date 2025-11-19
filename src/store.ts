@@ -50,7 +50,7 @@ interface SimulationState {
   agentSpeedMin: number
   agentSpeedMax: number
   baggageProbability: number // 0-1
-
+  
   // Gate Parameters
   gateCount: number
   gateServiceTime: number // seconds per person
@@ -210,7 +210,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
 
     if (agentsToSpawn > 0 && (maxAgents === 0 || agentsSpawnedTotal < maxAgents)) {
         for (let i = 0; i < agentsToSpawn; i++) {
-            const speed = agentSpeedMin + Math.random() * (agentSpeedMax - agentSpeedMin)
+            let speed = agentSpeedMin + Math.random() * (agentSpeedMax - agentSpeedMin)
             
             // Default values for preset modes
             let startPos: [number, number, number] = [0, 0, -tunnelLength/2 - 5]
@@ -295,7 +295,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
                 target: targetPos,
                 path: path,
                 pathIndex: 0,
-                state: 'walking',
+                state: 'walking' as const,
                 assignedGateIndex: assignedGateIndex,
                 hasBaggage: hasBaggage
             })
@@ -333,13 +333,6 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
             const dz = agent.position[2] - gate.pos[2]
             const dist = Math.sqrt(dx*dx + dz*dz)
 
-            // If close enough AND not already passed this specific gate instance
-            // Note: "hasPassedGate" is simple boolean, ideally we need a list of passed gate IDs.
-            // For Builder mode, to prevent getting stuck in loop, we need a "cooldown" or ID tracking.
-            // Simplified: if state is walking and close, stop.
-            // To avoid re-triggering, we only trigger if we are "approaching" (dot product?)
-            // OR: simpler -> Agent has a "currentGateId" it is processing.
-            
             if (dist < gate.range) {
                // Crude check to see if we just processed this one? 
                // Let's assume if we are 'walking' inside the range, we should stop unless we just left it.
@@ -369,7 +362,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
          }
          return agent // Stop moving
       }
-
+      
       // PATHFINDING MOVEMENT
       if (mode === 'BUILDER' && agent.path.length > 0) {
          if (agent.pathIndex < agent.path.length) {

@@ -6,12 +6,12 @@ export const SingleTurnstile = () => (
     {/* Left Box */}
     <mesh position={[-0.4, 0.5, 0]} castShadow receiveShadow>
       <boxGeometry args={[0.1, 1, 1]} />
-      <meshStandardMaterial color="#silver" metalness={0.8} roughness={0.2} />
+      <meshStandardMaterial color="silver" metalness={0.8} roughness={0.2} />
     </mesh>
     {/* Right Box */}
     <mesh position={[0.4, 0.5, 0]} castShadow receiveShadow>
       <boxGeometry args={[0.1, 1, 1]} />
-      <meshStandardMaterial color="#silver" metalness={0.8} roughness={0.2} />
+      <meshStandardMaterial color="silver" metalness={0.8} roughness={0.2} />
     </mesh>
     {/* Gate Arms (Visual) */}
     <mesh position={[0, 0.5, 0]}>
@@ -67,7 +67,7 @@ export const SingleMetalDetector = () => (
     </mesh>
     {/* Light indicator */}
     <mesh position={[0, 1.9, 0]}>
-       <cylinderGeometry args={[0.02, 0.02, 0.1]} rotation={[Math.PI/2, 0, 0]} />
+       <cylinderGeometry args={[0.02, 0.02, 0.1]} />
        <meshBasicMaterial color="green" />
     </mesh>
   </group>
@@ -120,26 +120,6 @@ export const Escalator = () => {
   // Calculate slope angle
   const angle = Math.atan2(height, length)
   const hypotenuse = Math.sqrt(length * length + height * height)
-  
-  // Position offset: The center of the rotated plane needs to be shifted up by height/2
-  const yOffset = height / 2
-  // Rotation direction depends on Escalator direction? 
-  // Actually geometry is same, just agent movement changes. 
-  // But visual representation of UP vs DOWN could imply steps texture direction, but simplified here.
-  // We rotate around X axis. +Angle tilts it up towards +Z.
-  
-  // If UP: Start (Z negative) is low, End (Z positive) is high. This is positive rotation around X? 
-  // Standard plane lies on XZ. Rotate -Math.PI/2 to face up.
-  // Then rotate by 'angle' around X.
-  
-  // Let's group it and rotate the group.
-  // The pivot is the center [0, 0, 0] which is at Z=0, Y=0.
-  // But our tunnel goes from -L/2 to L/2.
-  // If we rotate around center, -L/2 goes down, L/2 goes up.
-  // So we need to shift it up so start is at 0.
-  // Start (-L/2) should be at Y=0 (for UP) or Y=H (for DOWN)?
-  // Visual representation: always slope up from -Z to +Z.
-  // Agents decide if they walk UP or DOWN that slope.
   
   return (
     <group>
@@ -205,3 +185,14 @@ export const Escalator = () => {
   )
 }
 
+export const Facilities = () => {
+  const mode = useSimulationStore(state => state.mode)
+  
+  return (
+    <>
+      {mode === 'TURNSTILES' && <Turnstiles />}
+      {mode === 'SECURITY' && <Introscopes />}
+      {mode === 'ESCALATOR' && <Escalator />}
+    </>
+  )
+}

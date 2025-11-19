@@ -64,7 +64,7 @@ export const Agent = ({ agent }: AgentProps) => {
        // In future: calculate angle from velocity vector
     }
   })
-
+  
   return (
     <group ref={group} position={agent.position}>
       {/* Torso */}
