@@ -308,6 +308,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     // --- MOVEMENT LOGIC ---
     newAgents = newAgents.map(agent => {
       let nextPos = [...agent.position] as [number, number, number]
+      let velocity: [number, number, number] = [0, 0, 0];
       
       // 1. GENERIC GATE LOGIC (Works in both Legacy & Builder modes)
       // Check if close to any active gate-like object
@@ -448,15 +449,16 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
          nextPos[2] += dz
          
          // Store velocity for animation scaling
-         // We are not returning early here anymore, just falling through to return at bottom of map
-         return { 
-            ...agent, 
-            position: nextPos,
-            velocity: [dx/delta, 0, dz/delta]
-         }
+         velocity = [dx/delta, 0, dz/delta];
       }
 
-      return { ...agent, position: nextPos }
+      // Explicitly type the return object to match Agent interface
+      const updatedAgent: Agent = { 
+         ...agent, 
+         position: nextPos,
+         velocity: velocity
+      }
+      return updatedAgent
     }).filter(agent => {
        // Despawn logic
        if (mode === 'BUILDER') {

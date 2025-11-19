@@ -11,7 +11,7 @@ function App() {
         <Canvas shadows camera={{ position: [10, 10, 10], fov: 50 }}>
           <color attach="background" args={['#1e1e1e']} />
           <Suspense fallback={null}>
-            <Scene />
+          <Scene />
           </Suspense>
           <OrbitControls makeDefault />
           <Stats />
