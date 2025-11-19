@@ -18,11 +18,11 @@ export const Scene = () => {
     tick 
   } = useSimulationStore()
 
-  const { camera } = useThree()
+  const { camera: _camera } = useThree()
   const [hoverPos, setHoverPos] = useState<[number, number, number] | null>(null)
 
   // Simulation Loop
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
      tick(delta)
   })
 

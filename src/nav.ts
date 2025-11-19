@@ -13,7 +13,7 @@ export class NavigationGrid {
     console.log("NavGrid initialized (Dummy Mode)")
   }
 
-  updateObstacles(walls: { x: number, z: number, width: number, length: number }[]) {
+  updateObstacles(_walls: { x: number, z: number, width: number, length: number }[]) {
     // No-op
   }
 

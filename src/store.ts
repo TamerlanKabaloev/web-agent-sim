@@ -5,11 +5,11 @@ import { navSystem } from './nav'
 export type SimulationMode = 'TUNNEL' | 'ESCALATOR' | 'TURNSTILES' | 'SECURITY' | 'BUILDER'
 
 // Builder Types
-export type BuildTool = 'WALL' | 'SPAWNER' | 'TARGET' | 'ERASER' | 'NONE' | 'TURNSTILE' | 'INTRO_SCOPE' | 'METAL_DETECTOR' | 'DOOR' | 'STAIRS' | 'PLATFORM'
+export type BuildTool = 'WALL' | 'SPAWNER' | 'TARGET' | 'ERASER' | 'NONE' | 'TURNSTILE' | 'INTRO_SCOPE' | 'METAL_DETECTOR' | 'DOOR' | 'STAIRS' | 'PLATFORM' | 'TUNNEL'
 
 export interface BuildObject {
   id: string
-  type: 'WALL' | 'SPAWNER' | 'TARGET' | 'TURNSTILE' | 'INTRO_SCOPE' | 'METAL_DETECTOR' | 'DOOR' | 'STAIRS' | 'PLATFORM'
+  type: BuildTool
   position: [number, number, number]
   scale: [number, number, number] // x, y, z dimensions
   rotation: number // Y rotation
@@ -158,8 +158,8 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   setTunnelLength: (length) => set({ tunnelLength: length }),
   setPassengersPer15Min: (count) => set({ passengersPer15Min: count }),
   setMaxAgents: (count) => set({ maxAgents: count }),
-  setAgentSpeedRange: (min, max) => set({ agentSpeedMin: min, agentSpeedMax: max }),
-  setBaggageProbability: (prob) => set({ baggageProbability: prob }),
+  setAgentSpeedRange: (min: number, max: number) => set({ agentSpeedMin: min, agentSpeedMax: max }),
+  setBaggageProbability: (prob: number) => set({ baggageProbability: prob }),
   setGateCount: (count) => set({ gateCount: count, gateStatus: new Array(count).fill(0) }),
   setGateServiceTime: (time) => set({ gateServiceTime: time }),
   setEscalatorHeight: (height) => set({ escalatorHeight: height }),
@@ -286,8 +286,9 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
                speed *= (0.7 + Math.random() * 0.2)
             }
 
-            newAgents.push({
-                id: uuidv4(),
+            const agentId = uuidv4();
+            const newAgent: Agent = {
+                id: agentId,
                 position: startPos,
                 velocity: [0, 0, 0],
                 speed: speed,
@@ -298,7 +299,8 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
                 state: 'walking' as const,
                 assignedGateIndex: assignedGateIndex,
                 hasBaggage: hasBaggage
-            })
+            }
+            newAgents.push(newAgent)
         }
         newAgentsSpawnedTotal += agentsToSpawn
     }
@@ -340,7 +342,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
                if (!agent.processingSince || (now - agent.processingSince > 5.0)) { // 5s cooldown
                   return {
                      ...agent,
-                     state: 'processing',
+                     state: 'processing' as const, // Explicitly type as constant
                      processingSince: now,
                      // Snap to gate pos? Maybe not for custom builder, just stop.
                   }
@@ -356,7 +358,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
          if (timeSpent >= 2.0) {
              return {
                 ...agent,
-                state: 'walking',
+                state: 'walking' as const, // Explicitly type as constant
                 // Keep processingSince to use as cooldown
              }
          }
